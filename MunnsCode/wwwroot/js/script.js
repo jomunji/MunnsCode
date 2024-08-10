@@ -33,7 +33,7 @@ function runCycle(currentSquare) {
 	newzero = document.createElement("div")
 	container.appendChild(newzero)
 	newzero.style.backgroundColor = randomPastelColour()
-	//Here we need to add the class 'squares' to newzero, but since it changes depending on the mystery square, we do it there
+	newzero.classList.add("squares-" + currentSquare);
 	newzero.classList.add("zero")
 
 	//Make zero into centre
@@ -75,7 +75,8 @@ function MysterySquareTwo() {
 }
 //#endregion
 
-//#region Menu select function
+
+//#region Menu
 document.querySelectorAll('.menu').forEach(function (menuitem) {
 	menuitem.addEventListener("click", function () {
 		console.log(menuitem.id, "was clicked")
@@ -240,4 +241,4 @@ function randomGreenColour() {
 document.getElementById("div-one").style.backgroundColor = randomPastelColour()
 document.getElementById("div-two").style.backgroundColor = randomPastelColour()
 document.getElementById("div-three").style.backgroundColor = randomPastelColour()
-//endregion
+//#endregion

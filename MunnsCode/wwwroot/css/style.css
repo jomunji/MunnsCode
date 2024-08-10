@@ -1,11 +1,24 @@
-﻿body {
+﻿@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+
+html {
+	height: 100%;
+	width: 100%;
 }
-@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 
 body {
+	height: 100%;
+	width: 100%;
 	font-family: "Lilita One", sans-serif;
 	font-weight: 300;
 	overflow: hidden;
+}
+
+#john-container {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 #menu-hover {
@@ -54,15 +67,8 @@ body {
 	font-weight: 1000;
 } */
 
-#john-container {
-	height: 100%;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 
-.squares {
+.squares-one {
 	transition: all 1s ease;
 	position: absolute;
 	border-radius: 50px;
