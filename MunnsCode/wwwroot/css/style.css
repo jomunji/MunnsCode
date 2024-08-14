@@ -80,6 +80,18 @@ body {
 	transition: width 1s, height 1s, border-radius 6s ease, transform 6s ease;
 }
 
+.squares-three {
+	transition: all 1s ease;
+	position: absolute;
+	border-radius: 50px;
+}
+
+.squares-four {
+	transition: all 1s ease;
+	position: absolute;
+	border-radius: 100%;
+}
+
 .background-one {
 	width: 100%;
 	height: 100%;
@@ -97,6 +109,24 @@ body {
 	border: none !important;
 	z-index: 1;
 	border-radius: 0px !important;
+	font-size: 100px !important;
+	color: rgba(0,0,0,0) !important;
+}
+
+.background-three {
+	width: 200px;
+	height: 200px;
+	z-index: 1;
+	transform: translate(1000px);
+	font-size: 100px !important;
+	color: rgba(0,0,0,0) !important;
+}
+
+.background-four {
+	width: 200px;
+	height: 200px;
+	z-index: 1;
+	transform: translate(1000px);
 	font-size: 100px !important;
 	color: rgba(0,0,0,0) !important;
 }

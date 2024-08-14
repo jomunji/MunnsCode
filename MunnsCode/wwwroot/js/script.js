@@ -41,7 +41,7 @@ function runCycle(currentSquare) {
 	zero.classList.remove("zero");
 
 	//Delete background elements
-	var maxBackgroundDivs = 40;
+	var maxBackgroundDivs = 100;
 	var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
 	if (backgroundDivs.length > maxBackgroundDivs) {
 		// Remove the oldest div with the "background" class
@@ -54,7 +54,14 @@ function runCycle(currentSquare) {
 	}
 	else if (currentSquare == "two") {
 		MysterySquareTwo();
-	} else {
+	}
+	else if (currentSquare == "three") {
+		MysterySquareThree();
+	}
+	else if (currentSquare == "four") {
+		MysterySquareFour();
+	}
+	else {
 		newzero.classList.add("squares");
 	}
 
@@ -74,7 +81,42 @@ function MysterySquareTwo() {
 	newzero.classList.add("squares-two");
 }
 //#endregion
+function MysterySquareThree() {
+	// Get all elements with the class name 'background'
+	const backgroundElements = document.querySelectorAll('.background-' + currentSquare);
 
+	// Loop through each background element
+	backgroundElements.forEach(function (element) {
+		// Generate random values for translation
+		console.log('okay so this means that we are looping through backgroundelements')
+		const translateX = Math.random() * 3000 - 1500;
+		const translateY = Math.random() * 2000 - 1000;
+		//
+
+		// Apply the random translation to the transform property
+		element.style.transform = `translate(${translateX}px, ${translateY}px)`;
+	});
+}
+function MysterySquareFour() {
+	//const translateX = Math.random() * 3000 - 1500;
+	//const translateY = Math.random() * 2000 - 1000;
+	//centre.style.transform = `translate(${translateX}px, ${translateY}px)`;
+	translateDivInCircle(centre,3,12)
+	};
+
+function translateDivInCircle(div, radius, speed) {
+	let angle = 0;
+	const centerX = div.parentElement.clientWidth / 2;
+	const centerY = div.parentElement.clientHeight / 2;
+
+	const x = centerX + radius * Math.cos(angle) - div.clientWidth / 2;
+	const y = centerY + radius * Math.sin(angle) - div.clientHeight / 2;
+
+	div.style.transform = `translate(${x}px, ${y}px)`;
+
+	angle += speed;
+	requestAnimationFrame(animate);
+};
 
 //#region Menu
 document.querySelectorAll('.menu').forEach(function (menuitem) {
