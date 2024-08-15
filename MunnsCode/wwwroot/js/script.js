@@ -127,6 +127,8 @@ function runCycle(currentSquare) {
 		document.addEventListener('touchstart', handleTouch, false);
 		document.addEventListener('touchmove', handleTouch, false);
 		document.addEventListener('touchend', endTouch, false);
+		currentEventListener = "mouseover";
+		centre.addEventListener(currentEventListener, centreMouseoverFunction);
 	} else {
 		currentEventListener = "mouseover";
 		centre.addEventListener(currentEventListener, centreMouseoverFunction);
