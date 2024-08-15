@@ -67,7 +67,7 @@ function runCycle(currentSquare) {
 	//Make new zero
 	newzero = document.createElement("div")
 	container.appendChild(newzero)
-	newzero.style.backgroundColor = randomPastelColour()
+	newzero.style.backgroundColor = randomPinkColour()
 	newzero.classList.add("squares")
 	newzero.classList.add("squares-" + currentSquare);
 	newzero.classList.add("zero")
@@ -77,12 +77,12 @@ function runCycle(currentSquare) {
 	zero.classList.remove("zero");
 
 	//Delete background elements
-	var maxBackgroundDivs = 100;
-	var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
-	if (backgroundDivs.length > maxBackgroundDivs) {
-		// Remove the oldest div with the "background" class
-		container.removeChild(backgroundDivs[0]);
-	}
+	//var maxBackgroundDivs = 200;
+	//var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
+	//if (backgroundDivs.length > maxBackgroundDivs) {
+	//	// Remove the oldest div with the "background" class
+	//	container.removeChild(backgroundDivs[0]);
+	//}
 
 	//Square specific stuff
 	if (currentSquare == "one") {
@@ -100,6 +100,12 @@ function runCycle(currentSquare) {
 	else if (currentSquare == "five") {
 		MysterySquareFive()
 	}
+	else if (currentSquare == "six") {
+		MysterySquareSix()
+	}
+	else if (currentSquare == "seven") {
+		MysterySquareSeven()
+	}
 	else {
 		newzero.classList.add("squares");
 	}
@@ -111,7 +117,7 @@ function runCycle(currentSquare) {
 	//Reset variables
 	centre = document.querySelector(".centre")
 	zero = document.querySelector(".zero")
-
+	//centre.innerHTML = skewAngle;
 	
 	if (isTouchDevice) {
 		//currentEventListener = "touchstart";
@@ -130,28 +136,9 @@ function runCycle(currentSquare) {
 //#endregion
 
 //#region MysterySquare functions
-let sequentialBackgroundTransformcurrentIndex = 0;
+
 function MysterySquareTwo() {
-	const translations = [
-		{ x: 1000, y: 200 },
-		{ x: -1000, y: 200 },
-		{ x: 1000, y: -200 },
-		{ x: -1000, y: -200 },
 
-		{ x: 200, y: 500 },
-		{ x: -200, y: 500 },
-		{ x: 200, y: -500 },
-		{ x: -200, y: -500 }
-	];
-
-	// Get the next translation from the translations array based on the current index
-	const translation = translations[sequentialBackgroundTransformcurrentIndex];
-
-	// Apply the translation to the transform property
-	centre.style.transform = `translate(${translation.x}px, ${translation.y}px)`;
-
-	// Increment the current index for the next iteration
-	sequentialBackgroundTransformcurrentIndex = (sequentialBackgroundTransformcurrentIndex + 1) % translations.length;
 }
 function MysterySquareThree() {
 	// Get all elements with the class name 'background'
@@ -160,10 +147,8 @@ function MysterySquareThree() {
 	// Loop through each background element
 	backgroundElements.forEach(function (element) {
 		// Generate random values for translation
-		console.log('okay so this means that we are looping through backgroundelements')
 		const translateX = Math.random() * 3000 - 1500;
 		const translateY = Math.random() * 2000 - 1000;
-		//
 
 		// Apply the random translation to the transform property
 		element.style.transform = `translate(${translateX}px, ${translateY}px)`;
@@ -171,20 +156,17 @@ function MysterySquareThree() {
 }
 
 let angle = 0;
-let radius = 300;
-let speed = 1;
+let radius = 0;
+let speed = 0.5;
 function MysterySquareFour() {
 	//const translateX = Math.random() * 3000 - 1500;
 	//const translateY = Math.random() * 2000 - 1000;
 	//centre.style.transform = `translate(${translateX}px, ${translateY}px)`;
-	
-	const centerX = centre.clientWidth / 2;
-	const centerY = centre.clientHeight / 2;
 
-	const x = centerX + radius * Math.cos(angle) - centerX;
-	const y = centerY + radius * Math.sin(angle) - centerY;
+	const x = radius * Math.cos(angle) ;
+	const y = radius * Math.sin(angle) ;
 	centre.style.transform = `translate(${x}px, ${y}px)`;
-
+	radius += 1;
 	angle += speed;
 };
 function MysterySquareFive() {
@@ -195,6 +177,29 @@ function MysterySquareFive() {
 	//centre.style.width = size + "px";
 	centre.style.transform = `rotate(${rotation}deg)`;
 };
+
+var skewAngle = 0
+var maxSkewAngle = 75 //Max 80, max 45 for mobile
+var skewIncrement = 1 //Max 5-10
+goingUp = true
+function MysterySquareSix() {
+	centre.style.transform = `skew(${skewAngle}deg, ${skewAngle}deg)`;
+	if (skewAngle >= maxSkewAngle) {
+		goingUp = false
+	} else if (skewAngle <= -maxSkewAngle) {
+		goingUp = true
+	}
+	if (goingUp) {
+		skewAngle += skewIncrement
+	} else {
+		skewAngle -= skewIncrement
+	}
+	
+}
+
+function MysterySquareSeven() {
+
+}
 //#endregion
 
 //#region Reset stage
@@ -206,8 +211,12 @@ function resetStage(oldSquare, newSquare) {
 	//Update class of square elements
 	document.querySelectorAll('.squares-' + oldSquare).forEach(function (squareItem) {
 		squareItem.classList.remove("squares-" + oldSquare)
-		squareItem.classList.add("squares-"+newSquare)
+		squareItem.classList.add("squares-" + newSquare)
 	});
+
+
+	
+	
 	//Add new background element
 	newbackground = document.createElement("div")
 	container.insertBefore(newbackground, container.firstChild);
@@ -221,9 +230,15 @@ function resetStage(oldSquare, newSquare) {
 	centre.innerHTML = "START"
 	centre.removeEventListener("mouseover", centreMouseoverFunction)
 	centre.addEventListener("click", centreMouseoverFunction);
+	if (newSquare == "seven") {
+		for (let i = 0; i < 2; i++) {
+			const clone = centre.cloneNode(true);
+			clone.id = String("seven"+i)
+			document.getElementById("john-container").appendChild(clone);
+		}
+	}
 }
 //#endregion
-
 document.querySelectorAll('.menu').forEach(function (menuitem) {
 	menuitem.addEventListener("click", function () {
 		document.getElementById(currentSquare).style.color = "white"
@@ -307,6 +322,22 @@ function randomOrangeColour() {
 		"#ffb78b",
 		"#ffcfb1",
 		"#ffe7d8"
+	];
+
+	var currentHexCode = hexCodes[currentIndex];
+	currentIndex = (currentIndex + 1) % hexCodes.length;
+
+	return currentHexCode;
+}
+
+function randomPinkColour() {
+	var hexCodes = [
+		"#f9e7f8",
+		"#dea2db",
+		"#c073bc",
+		"#a0569c",
+		"#7a4b78",
+		"#5e405d"
 	];
 
 	var currentHexCode = hexCodes[currentIndex];
