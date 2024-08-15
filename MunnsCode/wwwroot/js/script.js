@@ -1,4 +1,36 @@
-﻿//#region Cycle function
+﻿//#region Touch screen functions
+let isTouching = false;
+let touchX = 0;
+let touchY = 0;
+function checkCollision() {
+	if (!isTouching) return;
+	const divRect = centre.getBoundingClientRect();
+
+	if (touchX >= divRect.left && touchX <= divRect.right &&
+		touchY >= divRect.top && touchY <= divRect.bottom) {
+		//centre.style.backgroundColor = 'blue';
+		runCycle(currentSquare)
+	} else {
+		//centre.style.backgroundColor = 'red';
+		//runCycle(currentSquare)
+	}
+
+	// Continue checking for collisions
+	requestAnimationFrame(checkCollision);
+}
+function handleTouch(event) {
+	const touch = event.touches[0];
+	touchX = touch.clientX;
+	touchY = touch.clientY;
+	isTouching = true;
+}
+
+function endTouch() {
+	isTouching = false;
+}
+//#endregion
+
+//#region Cycle function
 //There are 3 states of div: background; centre; zero.
 //Background means the div is covering the whole page usually - some mystery squares are different
 //Centre means the div is a 200x200 square in the middle of the page
@@ -11,15 +43,17 @@ centre = document.querySelector(".centre")
 zero = document.querySelector(".zero")
 start = document.querySelector(".start")
 bubble = document.getElementById("bubble")
+var currentEventListener = "click";
+var isTouchDevice = 'ontouchstart' in document.documentElement; //True for touch screen, false for not
 
-
-start.addEventListener("click", centreMouseoverFunction);
+start.addEventListener(currentEventListener, centreMouseoverFunction);
 
 function centreMouseoverFunction() {
 	runCycle(currentSquare)
 };
 
 function runCycle(currentSquare) {
+	
 	//console.log("Current square: ", currentSquare)
 	//Play bubble audio
 	bubble.currentTime = 0;
@@ -43,12 +77,12 @@ function runCycle(currentSquare) {
 	zero.classList.remove("zero");
 
 	//Delete background elements
-	//var maxBackgroundDivs = 100;
-	//var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
-	//if (backgroundDivs.length > maxBackgroundDivs) {
-	//	// Remove the oldest div with the "background" class
-	//	container.removeChild(backgroundDivs[0]);
-	//}
+	var maxBackgroundDivs = 100;
+	var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
+	if (backgroundDivs.length > maxBackgroundDivs) {
+		// Remove the oldest div with the "background" class
+		container.removeChild(backgroundDivs[0]);
+	}
 
 	//Square specific stuff
 	if (currentSquare == "one") {
@@ -71,12 +105,27 @@ function runCycle(currentSquare) {
 	}
 
 	//Remove eventlistener
-	centre.removeEventListener("mouseover", centreMouseoverFunction)
+	centre.removeEventListener(currentEventListener, centreMouseoverFunction)
+	console.log("Removed event listener: "+currentEventListener)
+
 	//Reset variables
 	centre = document.querySelector(".centre")
 	zero = document.querySelector(".zero")
 
-	centre.addEventListener("mouseover", centreMouseoverFunction);
+	
+	if (isTouchDevice) {
+		//currentEventListener = "touchstart";
+		//centre.addEventListener(currentEventListener, centreMouseoverFunction);
+		setInterval(checkCollision, 0.01);
+		//requestAnimationFrame(checkCollision);
+		document.addEventListener('touchstart', handleTouch, false);
+		document.addEventListener('touchmove', handleTouch, false);
+		document.addEventListener('touchend', endTouch, false);
+	} else {
+		currentEventListener = "mouseover";
+		centre.addEventListener(currentEventListener, centreMouseoverFunction);
+	}
+	
 }
 //#endregion
 
@@ -174,7 +223,6 @@ function resetStage(oldSquare, newSquare) {
 	centre.addEventListener("click", centreMouseoverFunction);
 }
 //#endregion
-
 
 document.querySelectorAll('.menu').forEach(function (menuitem) {
 	menuitem.addEventListener("click", function () {
@@ -287,3 +335,4 @@ document.getElementById("div-one").style.backgroundColor = randomPastelColour()
 document.getElementById("div-two").style.backgroundColor = randomPastelColour()
 document.getElementById("div-three").style.backgroundColor = randomPastelColour()
 //#endregion
+
