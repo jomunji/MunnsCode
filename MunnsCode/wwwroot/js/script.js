@@ -20,19 +20,21 @@ function centreMouseoverFunction() {
 };
 
 function runCycle(currentSquare) {
-	console.log("Current square: ", currentSquare)
+	//console.log("Current square: ", currentSquare)
 	//Play bubble audio
 	bubble.currentTime = 0;
 	bubble.play()
 
 	//Make centre into background
 	centre.classList.add("background-" + currentSquare);
+	centre.classList.add("background")
 	centre.classList.remove("centre");
 
 	//Make new zero
 	newzero = document.createElement("div")
 	container.appendChild(newzero)
 	newzero.style.backgroundColor = randomPastelColour()
+	newzero.classList.add("squares")
 	newzero.classList.add("squares-" + currentSquare);
 	newzero.classList.add("zero")
 
@@ -41,12 +43,12 @@ function runCycle(currentSquare) {
 	zero.classList.remove("zero");
 
 	//Delete background elements
-	var maxBackgroundDivs = 40;
-	var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
-	if (backgroundDivs.length > maxBackgroundDivs) {
-		// Remove the oldest div with the "background" class
-		container.removeChild(backgroundDivs[0]);
-	}
+	//var maxBackgroundDivs = 100;
+	//var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
+	//if (backgroundDivs.length > maxBackgroundDivs) {
+	//	// Remove the oldest div with the "background" class
+	//	container.removeChild(backgroundDivs[0]);
+	//}
 
 	//Square specific stuff
 	if (currentSquare == "one") {
@@ -54,7 +56,17 @@ function runCycle(currentSquare) {
 	}
 	else if (currentSquare == "two") {
 		MysterySquareTwo();
-	} else {
+	}
+	else if (currentSquare == "three") {
+		MysterySquareThree();
+	}
+	else if (currentSquare == "four") {
+		MysterySquareFour();
+	}
+	else if (currentSquare == "five") {
+		MysterySquareFive()
+	}
+	else {
 		newzero.classList.add("squares");
 	}
 
@@ -68,67 +80,9 @@ function runCycle(currentSquare) {
 }
 //#endregion
 
-//#region MysterySquare TWO
-function MysterySquareTwo() {
-	sequentialBackgroundTransform(centre);
-	newzero.classList.add("squares-two");
-}
-//#endregion
-
-
-//#region Menu
-document.querySelectorAll('.menu').forEach(function (menuitem) {
-	menuitem.addEventListener("click", function () {
-		console.log(menuitem.id, "was clicked")
-		//#region Square 1
-		if (menuitem.id == "one") {
-			resetStage();
-			currentSquare = "one"
-		} else if (menuitem.id == "two") {
-			resetStage();
-			currentSquare = "two"
-		} else if (menuitem.id == "three") {
-			resetStage();
-			currentSquare = "three"
-		} else if (menuitem.id == "four") {
-			resetStage();
-			currentSquare = "four"
-		} else if (menuitem.id == "five") {
-			resetStage();
-			currentSquare = "five"
-		} else if (menuitem.id == "six") {
-			resetStage();
-			currentSquare = "six"
-		}
-	})
-});
-//#endregion
-
-//#region Reset stage
-function resetStage() {
-	//Delete all background elements
-	document.querySelectorAll('.background-' + currentSquare).forEach(function (backgrounditem) {
-		backgrounditem.remove()
-	});
-	//Add new background element
-	newbackground = document.createElement("div")
-	container.insertBefore(newbackground, container.firstChild);
-	newbackground.style.backgroundColor = randomPastelColour()
-	newbackground.classList.add("squares")
-	newbackground.classList.add("background-one")
-	//Make centre element into start
-	centre = document.querySelector(".centre")
-	centre.classList.add("start")
-	centre.innerHTML = "START"
-	centre.removeEventListener("mouseover", centreMouseoverFunction)
-	centre.addEventListener("click", centreMouseoverFunction);
-}
-//#endregion
-
-//#region Square utility functions
+//#region MysterySquare functions
 let sequentialBackgroundTransformcurrentIndex = 0;
-
-function sequentialBackgroundTransform(element) {
+function MysterySquareTwo() {
 	const translations = [
 		{ x: 1000, y: 200 },
 		{ x: -1000, y: 200 },
@@ -145,13 +99,104 @@ function sequentialBackgroundTransform(element) {
 	const translation = translations[sequentialBackgroundTransformcurrentIndex];
 
 	// Apply the translation to the transform property
-	element.style.transform = `translate(${translation.x}px, ${translation.y}px)`;
+	centre.style.transform = `translate(${translation.x}px, ${translation.y}px)`;
 
 	// Increment the current index for the next iteration
 	sequentialBackgroundTransformcurrentIndex = (sequentialBackgroundTransformcurrentIndex + 1) % translations.length;
+}
+function MysterySquareThree() {
+	// Get all elements with the class name 'background'
+	const backgroundElements = document.querySelectorAll('.background-' + currentSquare);
+
+	// Loop through each background element
+	backgroundElements.forEach(function (element) {
+		// Generate random values for translation
+		console.log('okay so this means that we are looping through backgroundelements')
+		const translateX = Math.random() * 3000 - 1500;
+		const translateY = Math.random() * 2000 - 1000;
+		//
+
+		// Apply the random translation to the transform property
+		element.style.transform = `translate(${translateX}px, ${translateY}px)`;
+	});
+}
+
+let angle = 0;
+let radius = 300;
+let speed = 1;
+function MysterySquareFour() {
+	//const translateX = Math.random() * 3000 - 1500;
+	//const translateY = Math.random() * 2000 - 1000;
+	//centre.style.transform = `translate(${translateX}px, ${translateY}px)`;
+	
+	const centerX = centre.clientWidth / 2;
+	const centerY = centre.clientHeight / 2;
+
+	const x = centerX + radius * Math.cos(angle) - centerX;
+	const y = centerY + radius * Math.sin(angle) - centerY;
+	centre.style.transform = `translate(${x}px, ${y}px)`;
+
+	angle += speed;
+};
+function MysterySquareFive() {
+	const rotation = Math.floor(Math.random() * 300);
+    const size = String(Math.floor(Math.random() * (500 - 10 + 1)) + 10)
+	//centre.innerHTML = rotation;
+	//centre.style.height = size+"px";
+	//centre.style.width = size + "px";
+	centre.style.transform = `rotate(${rotation}deg)`;
 };
 //#endregion
 
+//#region Reset stage
+function resetStage(oldSquare, newSquare) {
+	//Delete all background elements
+	document.querySelectorAll('.background-' + oldSquare).forEach(function (backgrounditem) {
+		backgrounditem.remove()
+	});
+	//Update class of square elements
+	document.querySelectorAll('.squares-' + oldSquare).forEach(function (squareItem) {
+		squareItem.classList.remove("squares-" + oldSquare)
+		squareItem.classList.add("squares-"+newSquare)
+	});
+	//Add new background element
+	newbackground = document.createElement("div")
+	container.insertBefore(newbackground, container.firstChild);
+	newbackground.style.backgroundColor = randomPastelColour()
+	newbackground.classList.add("squares")
+	newbackground.classList.add("background-one")
+	newbackground.classList.add("background")
+	//Make centre element into start
+	centre = document.querySelector(".centre")
+	centre.classList.add("start")
+	centre.innerHTML = "START"
+	centre.removeEventListener("mouseover", centreMouseoverFunction)
+	centre.addEventListener("click", centreMouseoverFunction);
+}
+//#endregion
+
+
+document.querySelectorAll('.menu').forEach(function (menuitem) {
+	menuitem.addEventListener("click", function () {
+		document.getElementById(currentSquare).style.color = "white"
+		if (menuitem.id == "close") {
+			resetStage(currentSquare, "one")
+			currentSquare = "one"
+		} else if (menuitem.id == "random") {
+			menuitem.style.color = "hotpink";
+            var squareNames = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+			var randomSquare = squareNames[Math.floor(Math.random() * 9) + 1 - 1];
+			resetStage(currentSquare, randomSquare)
+			currentSquare = randomSquare
+		} else {
+			menuitem.style.color = "gold";
+			resetStage(currentSquare, menuitem.id)
+			currentSquare = menuitem.id
+			
+		}
+		
+	})
+});
 //#region Menu
 menuhover = document.getElementById("menu-hover")
 menucontainer = document.getElementById("menu-container")
