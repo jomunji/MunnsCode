@@ -53,7 +53,7 @@ function centreMouseoverFunction() {
 };
 
 function runCycle(currentSquare) {
-	
+
 	//console.log("Current square: ", currentSquare)
 	//Play bubble audio
 	bubble.currentTime = 0;
@@ -85,28 +85,13 @@ function runCycle(currentSquare) {
 	//}
 
 	//Square specific stuff
-	if (currentSquare == "one") {
-
-	}
-	else if (currentSquare == "two") {
-		MysterySquareTwo();
-	}
-	else if (currentSquare == "three") {
-		MysterySquareThree();
-	}
-	else if (currentSquare == "four") {
-		MysterySquareFour();
-	}
-	else if (currentSquare == "five") {
-		MysterySquareFive()
-	}
-	else if (currentSquare == "six") {
-		MysterySquareSix()
-	}
-	else if (currentSquare == "seven") {
-		MysterySquareSeven()
-	}
-	else {
+  //Gets the function name based on currentSquare
+  var functionName = "MysterySquare" + currentSquare[0].toUpperCase() + currentSquare.slice(1);
+  //Checks if possilbeFunction is an existing function
+  if (typeof window[functionName] === "function") {
+    //Call function based on currentSquare
+    window[functionName]();
+  } else {
 		newzero.classList.add("squares");
 	}
 
@@ -118,7 +103,7 @@ function runCycle(currentSquare) {
 	centre = document.querySelector(".centre")
 	zero = document.querySelector(".zero")
 	//centre.innerHTML = skewAngle;
-	
+
 	if (isTouchDevice) {
 		//currentEventListener = "touchstart";
 		//centre.addEventListener(currentEventListener, centreMouseoverFunction);
@@ -133,7 +118,7 @@ function runCycle(currentSquare) {
 		currentEventListener = "mouseover";
 		centre.addEventListener(currentEventListener, centreMouseoverFunction);
 	}
-	
+
 }
 //#endregion
 
@@ -196,7 +181,7 @@ function MysterySquareSix() {
 	} else {
 		skewAngle -= skewIncrement
 	}
-	
+
 }
 
 function MysterySquareSeven() {
@@ -217,8 +202,8 @@ function resetStage(oldSquare, newSquare) {
 	});
 
 
-	
-	
+
+
 	//Add new background element
 	newbackground = document.createElement("div")
 	container.insertBefore(newbackground, container.firstChild);
@@ -249,7 +234,7 @@ document.querySelectorAll('.menu').forEach(function (menuitem) {
 			currentSquare = "one"
 		} else if (menuitem.id == "random") {
 			menuitem.style.color = "hotpink";
-            var squareNames = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+      var squareNames = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
 			var randomSquare = squareNames[Math.floor(Math.random() * 9) + 1 - 1];
 			resetStage(currentSquare, randomSquare)
 			currentSquare = randomSquare
@@ -257,9 +242,9 @@ document.querySelectorAll('.menu').forEach(function (menuitem) {
 			menuitem.style.color = "gold";
 			resetStage(currentSquare, menuitem.id)
 			currentSquare = menuitem.id
-			
+
 		}
-		
+
 	})
 });
 //#region Menu
