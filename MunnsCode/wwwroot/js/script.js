@@ -42,7 +42,6 @@ container = document.getElementById('john-container')
 centre = document.querySelector(".centre")
 zero = document.querySelector(".zero")
 start = document.querySelector(".start")
-bubble = document.getElementById("bubble")
 var currentEventListener = "click";
 var isTouchDevice = 'ontouchstart' in document.documentElement; //True for touch screen, false for not
 
@@ -53,11 +52,6 @@ function centreMouseoverFunction() {
 };
 
 function runCycle(currentSquare) {
-	
-	//console.log("Current square: ", currentSquare)
-	//Play bubble audio
-	bubble.currentTime = 0;
-	bubble.play()
 
 	//Make centre into background
 	centre.classList.add("background-" + currentSquare);
@@ -67,7 +61,7 @@ function runCycle(currentSquare) {
 	//Make new zero
 	newzero = document.createElement("div")
 	container.appendChild(newzero)
-	newzero.style.backgroundColor = randomPinkColour()
+	newzero.style.backgroundColor = randomOrangeColour()
 	newzero.classList.add("squares")
 	newzero.classList.add("squares-" + currentSquare);
 	newzero.classList.add("zero")
@@ -76,20 +70,20 @@ function runCycle(currentSquare) {
 	zero.classList.add("centre");
 	zero.classList.remove("zero");
 
-	//Delete background elements
-	//var maxBackgroundDivs = 200;
-	//var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
-	//if (backgroundDivs.length > maxBackgroundDivs) {
-	//	// Remove the oldest div with the "background" class
-	//	container.removeChild(backgroundDivs[0]);
-	//}
+	//Default number of divs allowed is infinite
+	var maxBackgroundDivs = null;
+
+	//Default audio is bubble
+	audio_name = "bubble"
 
 	//Square specific stuff
 	if (currentSquare == "one") {
-
+		MysterySquareOne();
+		maxBackgroundDivs = 50
 	}
 	else if (currentSquare == "two") {
 		MysterySquareTwo();
+		maxBackgroundDivs = 50
 	}
 	else if (currentSquare == "three") {
 		MysterySquareThree();
@@ -106,13 +100,37 @@ function runCycle(currentSquare) {
 	else if (currentSquare == "seven") {
 		MysterySquareSeven()
 	}
+	else if (currentSquare == "eight") {
+		MysterySquareEight()
+	}
+	else if (currentSquare == "nine") {
+		MysterySquareNine()
+	}
+	else if (currentSquare == "ten") {
+		MysterySquareTen()
+		audio_name = "woosh"
+	}
 	else {
 		newzero.classList.add("squares");
 	}
 
+	var backgroundDivs = container.getElementsByClassName("background-" + currentSquare);
+	if (maxBackgroundDivs) {
+		if (backgroundDivs.length > maxBackgroundDivs) {
+			// Remove the oldest div with the "background" class
+			container.removeChild(backgroundDivs[0]);
+		}
+	}
+
+	//Play audio
+	audio = document.getElementById(audio_name)
+	if (audio) {
+		audio.currentTime = 0;
+		audio.play()
+	}
+
 	//Remove eventlistener
 	centre.removeEventListener(currentEventListener, centreMouseoverFunction)
-	console.log("Removed event listener: "+currentEventListener)
 
 	//Reset variables
 	centre = document.querySelector(".centre")
@@ -136,10 +154,14 @@ function runCycle(currentSquare) {
 //#endregion
 
 //#region MysterySquare functions
+function MysterySquareOne() {
+	// The functionality of the square is fully controlled by css (see .squares-one and .background-one classes in styles.css)
+}
 
 function MysterySquareTwo() {
-
+	// The functionality of the square is fully controlled by css (see .squares-two and .background-two classes in styles.css)
 }
+
 function MysterySquareThree() {
 	// Get all elements with the class name 'background'
 	const backgroundElements = document.querySelectorAll('.background-' + currentSquare);
@@ -155,35 +177,38 @@ function MysterySquareThree() {
 	});
 }
 
-let angle = 0;
-let radius = 0;
-let speed = 0.5;
+var angle_4 = 0;
+var radius_4 = 0;
+var speed_4 = 0.1;
 function MysterySquareFour() {
 	//const translateX = Math.random() * 3000 - 1500;
 	//const translateY = Math.random() * 2000 - 1000;
 	//centre.style.transform = `translate(${translateX}px, ${translateY}px)`;
 
-	const x = radius * Math.cos(angle) ;
-	const y = radius * Math.sin(angle) ;
+	const x = radius_4 * Math.cos(angle_4) ;
+	const y = radius_4 * Math.sin(angle_4) ;
 	centre.style.transform = `translate(${x}px, ${y}px)`;
-	radius += 1;
-	angle += speed;
-};
+	radius_4 += 1;
+	angle_4 += speed_4;
+}
+
 function MysterySquareFive() {
 	const rotation = Math.floor(Math.random() * 300);
-    const size = String(Math.floor(Math.random() * (500 - 10 + 1)) + 10)
+    const size = String(Math.floor(Math.random() * 200) + 200)
 	//centre.innerHTML = rotation;
-	//centre.style.height = size+"px";
-	//centre.style.width = size + "px";
+
+	centre.style.height = size+"px";
+	centre.style.width = size + "px";
 	centre.style.transform = `rotate(${rotation}deg)`;
-};
+}
 
 var skewAngle = 0
-var maxSkewAngle = 75 //Max 80, max 45 for mobile
+var maxSkewAngle = 80 //Max 80, max 45 for mobile
 var skewIncrement = 1 //Max 5-10
-goingUp = true
+var goingUp = true
 function MysterySquareSix() {
 	centre.style.transform = `skew(${skewAngle}deg, ${skewAngle}deg)`;
+
 	if (skewAngle >= maxSkewAngle) {
 		goingUp = false
 	} else if (skewAngle <= -maxSkewAngle) {
@@ -194,11 +219,48 @@ function MysterySquareSix() {
 	} else {
 		skewAngle -= skewIncrement
 	}
-	
 }
 
+var angle_7 = 0;
+var radius_7 = 0;
+var speed_7 = 0.1;
 function MysterySquareSeven() {
+	const x = radius_7 * Math.cos(angle_7);
+	const y = radius_7 * Math.sin(angle_7);
+	centre.style.transform = `translate(${x}px, ${y}px)`;
+	radius_7 += 1;
+	angle_7 += speed_7;
+}
 
+function MysterySquareEight() {
+
+}
+
+var angle_9 = 0;
+var radius_9 = 0;
+var speed_9 = 1;
+var opacity_9 = 100;
+var circle_radius_9 = 10
+function MysterySquareNine() {
+	const x = radius_9 * Math.cos(angle_9);
+	const y = radius_9 * Math.sin(angle_9);
+	centre.style.transform = `translate(${x}px, ${y}px)`;
+	centre.style.opacity = `${opacity_9}%`;
+	//centre.style.width = '${}'
+	radius_9 += 1;
+	angle_9 += speed_9;
+	//opacity_9 -= 1
+}
+
+function MysterySquareTen(){
+	// Generate random values for translation
+	const translateX = Math.random() * 3000 - 1500;
+	const translateY = Math.random() * 2000 - 1000;
+
+	const rotation = Math.random() * 360;
+
+	// Apply the random translation to the transform property
+	centre.style.transform = `translate(${translateX}px, ${translateY}px) rotate(${rotation}deg)`;
 }
 //#endregion
 
@@ -230,36 +292,16 @@ function resetStage(oldSquare, newSquare) {
 	centre.innerHTML = "START"
 	centre.removeEventListener("mouseover", centreMouseoverFunction)
 	centre.addEventListener("click", centreMouseoverFunction);
-	if (newSquare == "seven") {
-		for (let i = 0; i < 2; i++) {
-			const clone = centre.cloneNode(true);
-			clone.id = String("seven"+i)
-			document.getElementById("john-container").appendChild(clone);
-		}
-	}
+	//if (newSquare == "seven") {
+	//	for (let i = 0; i < 2; i++) {
+	//		const clone = centre.cloneNode(true);
+	//		clone.id = String("seven"+i)
+	//		document.getElementById("john-container").appendChild(clone);
+	//	}
+	//}
 }
 //#endregion
-document.querySelectorAll('.menu').forEach(function (menuitem) {
-	menuitem.addEventListener("click", function () {
-		document.getElementById(currentSquare).style.color = "white"
-		if (menuitem.id == "close") {
-			resetStage(currentSquare, "one")
-			currentSquare = "one"
-		} else if (menuitem.id == "random") {
-			menuitem.style.color = "hotpink";
-            var squareNames = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-			var randomSquare = squareNames[Math.floor(Math.random() * 9) + 1 - 1];
-			resetStage(currentSquare, randomSquare)
-			currentSquare = randomSquare
-		} else {
-			menuitem.style.color = "gold";
-			resetStage(currentSquare, menuitem.id)
-			currentSquare = menuitem.id
-			
-		}
-		
-	})
-});
+
 //#region Menu
 menuhover = document.getElementById("menu-hover")
 menucontainer = document.getElementById("menu-container")
@@ -283,6 +325,30 @@ menucontainer.addEventListener("mouseleave", function () {
 	//Move menuhover above
 	menuhover.style.zIndex = 4;
 })
+
+//Menu buttons functionality
+document.querySelectorAll('.menu').forEach(function (menuitem) {
+	menuitem.addEventListener("click", function () {
+		document.getElementById(currentSquare).style.color = "white"
+		if (menuitem.id == "close") {
+			resetStage(currentSquare, "one")
+			currentSquare = "one"
+		} else if (menuitem.id == "random") {
+			menuitem.style.color = "hotpink";
+			var squareNames = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+			var randomSquare = squareNames[Math.floor(Math.random() * 9) + 1 - 1];
+			resetStage(currentSquare, randomSquare)
+			currentSquare = randomSquare
+		} else {
+			menuitem.style.color = "gold";
+			resetStage(currentSquare, menuitem.id)
+			currentSquare = menuitem.id
+		}
+
+	})
+});
+
+
 //#endregion
 
 //#region Colour functions

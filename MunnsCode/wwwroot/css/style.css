@@ -36,7 +36,7 @@ body {
 	left: 0;
 	/* background-color:rgba(0,0,0,0.3); */
 	z-index: 4;
-	border:solid gold;
+/*	border:solid gold;*/
 }
 
 #menu-container {
@@ -65,7 +65,7 @@ body {
 	font-size: 25px;
 	transition: all 0.3s cubic-bezier(0.25, 0.1, 0.57, 1.47);
 	z-index: 2;
-	cursor: pointer;
+/*	cursor: pointer;*/
 	user-select: none;
 }
 
@@ -102,6 +102,32 @@ body {
 } 
  /*#endregion*/
 
+/*#region Admire*/
+#admire-hover {
+	position: fixed;
+	height: 6%;
+	width: 10%;
+	top: 0;
+	left: 0;
+	z-index: 4;
+/*	border:solid blue;*/
+}
+
+/*#admire-hover:hover + .centre {
+	border:solid green!important;
+}*/
+
+body:has(#admire-hover:hover) .centre{
+	opacity:0;
+}
+
+body:has(#admire-hover:hover) #cursor-image {
+	opacity: 0;
+	transition: opacity 1s;
+}
+
+/*#endregion*/
+
 /*#region Squares*/
 .squares {
 	transition: all 1s ease;
@@ -130,10 +156,25 @@ body {
 }
 
 .squares-six {
+
 }
 
 .squares-seven {
+
 }
+
+.squares-eight {
+
+}
+
+.squares-nine {
+
+}
+
+.squares-ten {
+
+}
+
 
 /*#endregion*/
 
@@ -174,29 +215,42 @@ body {
 }
 
 .background-four {
-	width: 200px;
-	height: 200px;
+	width: 100px;
+	height: 100px;
 	transform: translate(1000px);
 }
 
 .background-five{
 	width:400px;
 	height:400px;
-	border-radius: 0px;
+	border-radius:50px;
 }
 
 .background-six{
-	
+	width:300px;
+	height:300px;
 }
 
 .background-seven {
-
+	width: 1000px;
+	height: 100px;
+	transform: translate(1000px);
 }
 
 .background-eight {
 	width:800px;
 	height:800px;
 	transform:translateX(-600px) rotate(180deg);
+}
+
+.background-nine {
+	width: 10px;
+	height: 10px;
+/*	transform: translate(1000px);*/
+}
+
+.background-ten{
+
 }
 /*#endregion*/
 
@@ -226,10 +280,16 @@ body {
 	align-items: center;
 	font-size: 40px;
 	user-select: none;
-	cursor: pointer;
+/*	cursor: pointer;*/
 }
 
 .start:hover {
 	font-size: 44px;
+}
+/*#endregion*/
+
+/*#region Custom Cursor*/
+* {
+	cursor: url("/Images/cursor icon.png"),auto;
 }
 /*#endregion*/
